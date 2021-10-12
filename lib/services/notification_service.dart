@@ -5,14 +5,39 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:hng/app/app.locator.dart';
 import 'package:hng/ui/shared/colors.dart';
+import 'package:hng/utilities/storage_keys.dart';
+
+import 'local_storage_services.dart';
 
 class NotificationService {
   final String messsageChannelKey = 'message';
-
+  bool _canShowNotification = true;
+  final _sharedPreference = locator<SharedPreferenceLocalStorage>();
   final StreamController<NotificationPayload> _notificationControl =
       StreamController.broadcast();
 
   final Random rand = Random();
+
+  void setCanShowNotification(int time) async {
+    _canShowNotification = false;
+    final duration = DateTime.now().millisecondsSinceEpoch - time;
+    if (duration <= 0) {
+      _canShowNotification = true;
+      return;
+    }
+    Timer(Duration(milliseconds: duration), () => _canShowNotification = true);
+  }
+
+  void updateCanShowNotification() {
+    try {
+      final time = _sharedPreference.getDouble(
+        StorageKeys.doNotDisturb,
+      );
+      setCanShowNotification(time!.toInt());
+    } catch (e) {
+      setCanShowNotification(DateTime.now().millisecondsSinceEpoch);
+    }
+  }
 
   ///Listen to notification click by listening to stream and navigate to the
   ///respective screen by using the payload returned
@@ -44,7 +69,18 @@ class NotificationService {
     AwesomeNotifications().actionStream.listen((receivedNotifiction) {
       var payload = NotificationPayload._fromMap(receivedNotifiction.payload);
       _notificationControl.sink.add(payload);
+      if(isNotificationAllowed()){
+        _notificationControl.sink.add(payload);
+      }
     });
+  }
+
+  bool isNotificationAllowed(){
+    final futureTime = _sharedPreference.getDouble(
+      StorageKeys.doNotDisturb,
+    ) ?? 0;
+    DateTime now = DateTime.now();
+    return now.millisecondsSinceEpoch > futureTime;
   }
 
   void show({

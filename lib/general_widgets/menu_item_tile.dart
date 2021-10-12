@@ -17,6 +17,7 @@ class MenuItemTile extends StatelessWidget {
     this.bottomBorder = false,
     this.onChanged,
     this.topBorder = true,
+    this.trailingText,
     Key? key,
   })  : _tileType = _TileType.normal,
         super(key: key);
@@ -33,6 +34,7 @@ class MenuItemTile extends StatelessWidget {
     this.bottomBorder = false,
     this.topBorder = true,
     Key? key,
+    this.trailingText,
   })  : _tileType = _TileType.icon,
         super(key: key);
 
@@ -47,7 +49,7 @@ class MenuItemTile extends StatelessWidget {
     required this.value,
     Key? key,
     this.bottomBorder = false,
-    this.topBorder = true,
+    this.topBorder = true, this.trailingText,
   })  : _tileType = _TileType.flipSwitch,
         super(key: key);
 
@@ -62,6 +64,7 @@ class MenuItemTile extends StatelessWidget {
   final bool topBorder;
   final bool value;
   final Color? iconColor;
+  final String? trailingText;
 
   Widget? selectIcon() {
     if (icon == null && imageIcon == null) {
@@ -82,7 +85,6 @@ class MenuItemTile extends StatelessWidget {
       case _TileType.normal:
         return ListTile(
           title: text,
-
           subtitle: subtitle != null
               ? Text(
                   subtitle ?? '',

@@ -6,6 +6,7 @@ import 'thread_options_bottomsheet/widget/recent_emojis.dart';
 
 Future<dynamic> zuriChatBottomSheet(
       {required BuildContext context,
+        Function()? editMessage,
       Function()? markUnread,
       Function()? remindMe,
       Function()? addToSavedItems,
@@ -57,6 +58,11 @@ Future<dynamic> zuriChatBottomSheet(
                 ],
               ),
               const Divider(),
+              ListTile(
+                title: Text("Edit a message", style: AppTextStyles.heading9),
+                leading: const Icon(Icons.line_style_outlined),
+                onTap: editMessage,
+              ),
               ListTile(
                 title: Text("Mark Unread", style: AppTextStyles.heading9),
                 leading: const Icon(Icons.line_style_outlined),

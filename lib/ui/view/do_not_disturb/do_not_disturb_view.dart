@@ -9,9 +9,17 @@ import 'do_not_disturb_viewmodel.dart';
 class DoNotDisturbView extends StatelessWidget {
   const DoNotDisturbView({Key? key}) : super(key: key);
 
+
+
   @override
   Widget build(BuildContext context) {
+    var selected;
     return ViewModelBuilder<DoNotDisturbViewModel>.reactive(
+      onModelReady: (model) {
+        model.init();
+        selected = model.getSelectedTime();
+         print(" selected $selected");
+      },
       builder: (context, model, child) => Scaffold(
         backgroundColor: AppColors.whiteColor,
         appBar: ZuriAppBar(
@@ -24,16 +32,21 @@ class DoNotDisturbView extends StatelessWidget {
           whiteBackground: true,
           actions: [
             TextButton(
-              onPressed: () {},
+              onPressed: () {model.turnOnNotification();},
               child: Text(
                 'Save',
-                style: AppTextStyles.heading8,
+                style: AppTextStyles.heading5,
               ),
             ),
           ],
         ),
         body: Column(
           children: [
+            // Visibility(
+            //     child: InkWell(child: const Text('Turn off',
+            //   style: TextStyle(color: AppColors.numberContainerColor),),
+            //   onTap: (){model.turnOffNotification();},),
+            //     visible: model.notifsOn),
             Flexible(
               fit: FlexFit.loose,
               child: ListView.builder(
@@ -43,12 +56,16 @@ class DoNotDisturbView extends StatelessWidget {
                   leading: Radio(
                     activeColor: AppColors.zuriPrimaryColor,
                     value: index,
-                    groupValue: model.currentValue,
+                    groupValue:  model.currentValue,
                     onChanged: model.changeTime,
                   ),
                 ),
               ),
             ),
+            // Visibility(
+            //   child:  const Text('Paused Notification until',
+            //       style: TextStyle(color: AppColors.zuriPrimaryColor)),
+            //   visible: model.notifsOn,)
           ],
         ),
       ),

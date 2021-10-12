@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:hng/constants/app_strings.dart';
 import 'package:hng/package/base/server-request/api/zuri_api.dart';
+import 'package:hng/services/notification_service.dart';
 import 'package:hng/ui/nav_pages/home_page/widgets/home_list_items.dart';
 import 'package:hng/ui/shared/colors.dart';
 import 'package:hng/utilities/constants.dart';
@@ -31,10 +32,14 @@ class OrganizationViewModel extends BaseViewModel {
   final _snackBar = locator<SnackbarService>();
   final _connectivityService = locator<ConnectivityService>();
   final _apiService = ZuriApi(coreBaseUrl);
+  final _notificationService = locator<NotificationService>();
 
   void initViewModel() {
     fetchOrganizations();
     getOrganizationMemberList();
+    try{
+      _notificationService.updateCanShowNotification();
+    }catch(e){log.i(e.toString());}
   }
 
   Future<void> navigateToNewOrganization() async {
@@ -151,6 +156,12 @@ class OrganizationViewModel extends BaseViewModel {
       setBusy(false);
     } catch (e) {
       log.i(e.toString());
+
+      /// i added this to checkout error
+      snackbar.showCustomSnackBar(
+          duration: const Duration(seconds: 3),
+    variant: SnackbarType.failure,
+    message: errorOccurred);
     }
   }
 

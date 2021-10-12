@@ -42,6 +42,13 @@ abstract class Api {
       required String phoneNumber,
       required String token});
 
+  //EDIT A MESSAGE
+  Future<dynamic> editMessage(
+      {required String senderId,
+      required String messageId,
+        required String message,
+        required String orgId, required String roomId, required String messageUuid, required String token,
+      });
   // THE SERVICE TO GET LIST OF ORGANIZATIONS
   Future<List<OrganizationModel>> fetchListOfOrganizations(token);
 

@@ -58,6 +58,11 @@ class ThreadOptionsBottomSheetView extends StatelessWidget {
                       ],
                     ),
                     const Divider(),
+                    // const MenuItemTile(
+                    //     topBorder: false,
+                    //     icon: Icons.message,
+                    //     text: Text('Edit a message'),
+                    // ),
                     const MenuItemTile(
                         topBorder: false,
                         icon: Icons.message,

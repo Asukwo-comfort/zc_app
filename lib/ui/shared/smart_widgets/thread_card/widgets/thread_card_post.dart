@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hng/ui/shared/bottom_sheets/zuri_chat_bottomsheet.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:stacked/stacked.dart';
-
 import '../../../../../general_widgets/custom_text.dart';
 import '../../../../../models/user_post.dart';
 import '../../../shared.dart';
@@ -10,6 +9,8 @@ import '../../../styles.dart';
 import '../../text_parser/text_parser_view.dart';
 import '../thread_card_viewmodel.dart';
 import 'package:hng/app/app.logger.dart';
+
+
 
 class ThreadCardPost extends ViewModelWidget<ThreadCardViewModel> {
   ThreadCardPost(this.userThreadPost, {Key? key}) : super(key: key);
@@ -52,7 +53,10 @@ class ThreadCardPost extends ViewModelWidget<ThreadCardViewModel> {
                     trailing: const Icon(Icons.mark_chat_read_outlined),
                     duration: const Duration(seconds: 3),
                   );
-                }),
+                },
+                   editMessage: (){
+
+                   }),
                   child: Container(
                       width: 40,
                       height: 40,
@@ -93,7 +97,6 @@ class ThreadCardPost extends ViewModelWidget<ThreadCardViewModel> {
                       const SizedBox(height: 10),
                       TextParser(userThreadPost!.message),
                       const SizedBox(height: 10),
-
                       // Wrap(
                       //   spacing: 5,
                       //   runSpacing: 5,

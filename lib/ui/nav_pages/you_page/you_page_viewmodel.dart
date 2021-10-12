@@ -23,6 +23,7 @@ class YouPageViewModel extends BaseViewModel {
   final _snackBar = locator<SnackbarService>();
   final _connectivityService = locator<ConnectivityService>();
   final _apiService = ZuriApi(coreBaseUrl);
+  String notificationStatus = 'off';
 
   String get username =>
       (_userService.userDetails?.displayName?.isNotEmpty ?? false

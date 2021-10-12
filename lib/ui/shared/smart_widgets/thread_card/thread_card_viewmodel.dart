@@ -53,6 +53,10 @@ class ThreadCardViewModel extends BaseViewModel {
     }
   }
 
+// Future editMessage(){
+//
+// }
+
   Future navigateToThread(UserPost? userPost) async {
     _navigationService.navigateTo(
       Routes.threadDetailView,

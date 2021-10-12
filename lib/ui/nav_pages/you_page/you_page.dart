@@ -17,7 +17,8 @@ class YouPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<YouPageViewModel>.reactive(
       viewModelBuilder: () => YouPageViewModel(),
-      builder: (context, model, child) => Scaffold(
+       // onModelReady: (model) => model.init(),
+       builder: (context, model, child) => Scaffold(
         appBar: ZuriAppBar(
           orgTitle: Text(You, style: ZuriTextStyle.organizationNameText()),
           bottomNavBarScreen: true,
@@ -46,6 +47,7 @@ class YouPage extends StatelessWidget {
                     PauseNotifs,
                     style: AppTextStyles.faintBodyText.copyWith(fontSize: 16),
                   ),
+                  trailingText: model.notificationStatus,
                   onPressed: model.pauseNotifications,
                   topBorder: false,
                 ),

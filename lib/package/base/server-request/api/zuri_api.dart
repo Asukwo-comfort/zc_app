@@ -30,6 +30,7 @@ class ZuriApi implements Api {
   final snackbar = locator<SnackbarService>();
 
   StreamController<String> controller = StreamController.broadcast();
+
   ZuriApi(baseUrl) {
     dio.interceptors.add(DioInterceptor());
     dio.options.sendTimeout = 60000;
@@ -38,8 +39,7 @@ class ZuriApi implements Api {
     log.i('Zuri Api constructed and DIO setup register');
   }
 
-  Future<dynamic> get(
-    String string, {
+  Future<dynamic> get(String string, {
     Map<String, dynamic>? queryParameters,
     String? token,
   }) async {
@@ -62,8 +62,7 @@ class ZuriApi implements Api {
     }
   }
 
-  Future<dynamic> post(
-    String string, {
+  Future<dynamic> post(String string, {
     required Map<String, dynamic> body,
     String? token,
   }) async {
@@ -86,8 +85,7 @@ class ZuriApi implements Api {
     }
   }
 
-  Future<dynamic> put(
-    String string, {
+  Future<dynamic> put(String string, {
     required Map<String, dynamic> body,
     String? token,
   }) async {
@@ -128,6 +126,7 @@ class ZuriApi implements Api {
       handleApiError(e);
     }
   }
+
 
   @override
   Future<ApiResponse?> delete(String string,
@@ -170,14 +169,13 @@ class ZuriApi implements Api {
   }
 
   @override
-  Future<dynamic> signUp(
-      {required String email,
-      required String password,
-      required String firstName,
-      required String lastName,
-      required String displayName,
-      required String phoneNumber,
-      required String token}) async {
+  Future<dynamic> signUp({required String email,
+    required String password,
+    required String firstName,
+    required String lastName,
+    required String displayName,
+    required String phoneNumber,
+    required String token}) async {
     return await post(
       "$coreBaseUrl/users",
       body: {
@@ -215,8 +213,8 @@ class ZuriApi implements Api {
   @override
 
   ///Get the list of Organization the user has joined
-  Future<List<OrganizationModel>> getJoinedOrganizations(
-      token, String email) async {
+  Future<List<OrganizationModel>> getJoinedOrganizations(token,
+      String email) async {
     try {
       final res = await dio.get('$channelsBaseUrl/users/$email/organizations',
           options: Options(
@@ -360,8 +358,8 @@ class ZuriApi implements Api {
   }
 
   @override
-  Future<void> addMemberToChannel(
-      String channelId, String orgId, String userId, token) async {
+  Future<void> addMemberToChannel(String channelId, String orgId, String userId,
+      token) async {
     await post(
       "$channelsBaseUrl/v1/$orgId/channels/$channelId/members/",
       //  "/614679ee1a5607b13c00bcb7/channels/$channelId/members/",
@@ -397,8 +395,8 @@ class ZuriApi implements Api {
   /// FETCHING MEMBERS
 
   @override
-  Future<List<UserSearch>> fetchMembersInOrganization(
-      String orgId, token) async {
+  Future<List<UserSearch>> fetchMembersInOrganization(String orgId,
+      token) async {
     final res = await dio.get(
       '$channelsBaseUrl/organizations/$orgId/members',
       options: Options(
@@ -431,8 +429,8 @@ class ZuriApi implements Api {
   Future<List> getActiveRooms(String orgId, String userId, token) async {
     try {
       final res = await get(
-              '$dmsBaseUrl/api/v1/org/$orgId/users/$userId/rooms/',
-              token: token),
+          '$dmsBaseUrl/api/v1/org/$orgId/users/$userId/rooms/',
+          token: token),
           joinedChannels = res?.data['joined_rooms'] ?? [];
       log.i(joinedChannels);
       return joinedChannels;
@@ -448,7 +446,7 @@ class ZuriApi implements Api {
   Future<List> getActiveDms(String orgId, token) async {
     try {
       final res =
-              await get('$channelsBaseUrl/v1/$orgId/channels/', token: token),
+      await get('$channelsBaseUrl/v1/$orgId/channels/', token: token),
           joinedChannels = res?.data ?? [];
       log.i(joinedChannels);
       return joinedChannels;
@@ -462,8 +460,8 @@ class ZuriApi implements Api {
 
   // Joins a channel using the parameters below
   @override
-  Future<Map> joinChannel(
-      String channelId, String userId, String orgId, token) async {
+  Future<Map> joinChannel(String channelId, String userId, String orgId,
+      token) async {
     try {
       final res = await post(
           '$channelsBaseUrl/$orgId/channels/$channelId/members/',
@@ -487,10 +485,10 @@ class ZuriApi implements Api {
   Future getChannelMessages(String channelId, String orgId, token) async {
     try {
       final res =
-          await dio.get('$channelsBaseUrl/$orgId/channels/$channelId/messages/',
-              options: Options(
-                headers: {'Authorization': 'Bearer $token'},
-              ));
+      await dio.get('$channelsBaseUrl/$orgId/channels/$channelId/messages/',
+          options: Options(
+            headers: {'Authorization': 'Bearer $token'},
+          ));
       log.i(res.data['data']);
       return res.data['data'];
     } on DioError catch (e) {
@@ -577,14 +575,13 @@ class ZuriApi implements Api {
   /// Creates channels into the organization
   /// All are required
   @override
-  Future<bool> createChannels(
-      {required String name,
-      required String owner,
-      required String email,
-      required String orgId,
-      required String description,
-      required bool private,
-      token}) async {
+  Future<bool> createChannels({required String name,
+    required String owner,
+    required String email,
+    required String orgId,
+    required String description,
+    required bool private,
+    token}) async {
     try {
       final res = await post('$channelsBaseUrl/v1/$orgId/channels/',
           body: {
@@ -611,7 +608,7 @@ class ZuriApi implements Api {
   getChannelPage(String id, String orgId, token) async {
     try {
       final response =
-          await get('$channelsBaseUrl/v1/$orgId/channels/$id/', token: token);
+      await get('$channelsBaseUrl/v1/$orgId/channels/$id/', token: token);
       return ChannelModel.fromJson(json.decode(response.data));
     } on DioError catch (e) {
       log.w(e.toString());
@@ -650,7 +647,7 @@ class ZuriApi implements Api {
           actionsIconTheme: IconThemeData(color: AppColors.blackColor),
         ),
         floatingActionButtonTheme:
-            const FloatingActionButtonThemeData().copyWith(
+        const FloatingActionButtonThemeData().copyWith(
           backgroundColor: AppColors.zuriPrimaryColor,
         ),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -670,7 +667,7 @@ class ZuriApi implements Api {
           ),
         ),
         floatingActionButtonTheme:
-            const FloatingActionButtonThemeData().copyWith(
+        const FloatingActionButtonThemeData().copyWith(
           backgroundColor: AppColors.kimbieAccent,
         ),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -709,7 +706,7 @@ class ZuriApi implements Api {
   Future sendPatchRequest(body, endpoint, userId) async {
     try {
       final response =
-          await dio.patch(apiBaseUrl + endpoint, data: json.encode(body));
+      await dio.patch(apiBaseUrl + endpoint, data: json.encode(body));
       final result = response.data;
       return result;
     } on DioError catch (e) {
@@ -733,8 +730,8 @@ class ZuriApi implements Api {
 
   /// Fetches a list of channels that a user is, in that organization
   @override
-  Future joinedChannelsList(
-      String currentOrgId, String currentUserId, token) async {
+  Future joinedChannelsList(String currentOrgId, String currentUserId,
+      token) async {
     try {
       final res = await dio.get(
           '$channelsBaseUrl/api/v1/$currentOrgId/channels/users/$currentUserId/',
@@ -749,8 +746,8 @@ class ZuriApi implements Api {
 
   /// Fetches a list of members in that organization
   @override
-  Future fetchListOfMembers(
-      String currentOrgId, String channelId, token) async {
+  Future fetchListOfMembers(String currentOrgId, String channelId,
+      token) async {
     try {
       final res = await dio.get(
           '$channelsBaseUrl/vi/$currentOrgId/channels/$channelId/members/',
@@ -783,8 +780,7 @@ class ZuriApi implements Api {
   }
 
   @override
-  Future<String> uploadImage(
-    File? image, {
+  Future<String> uploadImage(File? image, {
     required String token,
     required String memberId,
     required String orgId,
@@ -793,7 +789,9 @@ class ZuriApi implements Api {
       "image": MultipartFile(
         image!.openRead(),
         await image.length(),
-        filename: image.path.split(Platform.pathSeparator).last,
+        filename: image.path
+            .split(Platform.pathSeparator)
+            .last,
       ),
     });
     try {
@@ -812,4 +810,41 @@ class ZuriApi implements Api {
       return "error uploading the image";
     }
   }
+
+
+  @override
+  Future editMessage(
+      {required String senderId, required String messageId, required String message, required String token,
+      required String orgId, required String roomId, required String messageUuid }) async {
+    final response = await put("$dmsBaseUrl/v1/org/$orgId/rooms/$roomId/messages/$messageId}/threads/$messageUuid",
+        body: {
+      'sender_id': senderId,
+      'message_id': messageId,
+      'message': message
+    },
+    token: token);
+    log.i(response.data);
+  }
 }
+// Future<dynamic> get(String string, {
+//   Map<String, dynamic>? queryParameters,
+//   String? token,
+// }) async {
+//   log.i('Making request to $string');
+//   try {
+//     final response = await dio.get(string.toString(),
+//         queryParameters: queryParameters,
+//         options: Options(headers: {'Authorization': 'Bearer $token'}));
+//
+//     log.i('Response from $string \n${response.data}');
+//     return ApiUtils.toApiResponse(response);
+//   } on DioError catch (e) {
+//     snackbar.showCustomSnackBar(
+//       duration: const Duration(seconds: 3),
+//       variant: SnackbarType.failure,
+//       message: e.response!.data!['message'] ?? errorOccurred,
+//     );
+//     log.w(e.toString());
+//     handleApiError(e);
+//   }
+// }

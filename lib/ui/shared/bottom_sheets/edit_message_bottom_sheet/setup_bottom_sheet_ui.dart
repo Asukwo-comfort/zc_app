@@ -62,6 +62,13 @@ class FloatingBoxBottomSheet extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                     leading: const Icon(Icons.message_rounded),
+                    title: const Text('Edit a Message'),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.message_rounded),
                     title: const Text('Follow Thread'),
                     onTap: () {
                       Navigator.pop(context);
